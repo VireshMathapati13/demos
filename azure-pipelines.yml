@@ -1,0 +1,32 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: TerraformTaskV4@4
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    backendServiceArm: 'Demo-Sandbox-9'
+    backendAzureRmResourceGroupName: 'viresh-tfstate-rg-donotdelete'
+    backendAzureRmStorageAccountName: 'vireshtesttfstatesa'
+    backendAzureRmContainerName: 'tfstate'
+    backendAzureRmKey: '01aksdemo'
+
+- task: TerraformTaskV4@4
+  inputs:
+    provider: 'azurerm'
+    command: 'validate'
+
+- task: TerraformTaskV4@4
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    environmentServiceNameAzureRM: 'Demo-Sandbox-9'
