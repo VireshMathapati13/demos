@@ -11,6 +11,7 @@ pool:
 
 steps:
 - task: TerraformTaskV4@4
+  displayName: Terraform init
   inputs:
     provider: 'azurerm'
     command: 'init'
@@ -22,14 +23,22 @@ steps:
     backendAzureRmKey: '01aksdemo'
 
 - task: TerraformTaskV4@4
+  displayName: Terraform Validate
   inputs:
     provider: 'azurerm'
     command: 'validate'
     workingDirectory: '$(System.DefaultWorkingDirectory)/01-aks-demo/'
 
 - task: TerraformTaskV4@4
+  displayName: Terraform plan
   inputs:
     provider: 'azurerm'
     command: 'plan'
     workingDirectory: '$(System.DefaultWorkingDirectory)/01-aks-demo/'
     environmentServiceNameAzureRM: 'Demo-Sandbox-9'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Pipeline.Workspace)'
+    artifact: 'drop'
+    publishLocation: 'pipeline'
