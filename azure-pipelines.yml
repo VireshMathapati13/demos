@@ -39,6 +39,6 @@ steps:
 
 - task: PublishPipelineArtifact@1
   inputs:
-    targetPath: '$(Pipeline.Workspace)'
+    targetPath: '$(System.DefaultWorkingDirectory)/01-aks-demo/'
     artifact: 'drop'
     publishLocation: 'pipeline'
