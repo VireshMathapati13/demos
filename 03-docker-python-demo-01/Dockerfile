@@ -1,5 +1,6 @@
 # Use an official Python image with necessary build tools
-FROM python:3.10-slim
+FROM python:3.9
+
 
 # Set working directory
 WORKDIR /app
@@ -11,6 +12,11 @@ RUN apt-get update && apt-get install -y \
     gfortran \
     libopenblas-dev \
     liblapack-dev \
+    python3-dev \
+    libpq-dev \
+    libxml2-dev \
+    libxslt-dev \
+    zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Upgrade pip and setuptools
@@ -19,11 +25,12 @@ RUN pip install --upgrade pip setuptools wheel
 # Copy requirements file
 COPY requirements.txt ./
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
 # Copy the application code
 COPY . .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir --only-binary=:all: -r requirements.txt
+
 
 # Set the default command
 CMD ["python", "app.py"]  # Change this if needed
