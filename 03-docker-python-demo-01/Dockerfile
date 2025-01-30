@@ -1,21 +1,31 @@
-# This is a sample Dockerfile for testing purposes
-# Use an official Python runtime as a parent image
-FROM python:3.8-alpine
+# Use an official Python image with necessary build tools
+FROM python:3.10
 
-# Set the working directory in the container
+# Set working directory
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+# Install system dependencies for pandas and numpy
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    python3-dev \
+    python3-distutils \
+    python3-setuptools \
+    gfortran \
+    libopenblas-dev \
+    liblapack-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install any needed packages specified in requirements.txt
+# Upgrade pip and setuptools
+RUN pip install --upgrade pip setuptools wheel
+
+# Copy requirements file
+COPY requirements.txt ./
+
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Make port 80 available to the world outside this container
-EXPOSE 80
+# Copy the application code
+COPY . .
 
-# Define environment variable
-ENV NAME World
-
-# Run app.py when the container launches
-CMD ["python", "app.py"]
+# Set the default command
+CMD ["python", "app.py"]  # Change this if needed
