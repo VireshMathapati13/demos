@@ -1,5 +1,5 @@
 # Use an official Python image with necessary build tools
-FROM python:3.10
+FROM python:3.10-slim
 
 # Set working directory
 WORKDIR /app
@@ -7,9 +7,7 @@ WORKDIR /app
 # Install system dependencies for pandas and numpy
 RUN apt-get update && apt-get install -y \
     build-essential \
-    python3-dev \
-    python3-distutils \
-    python3-setuptools \
+    gcc \
     gfortran \
     libopenblas-dev \
     liblapack-dev \
